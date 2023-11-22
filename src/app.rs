@@ -24,7 +24,7 @@ pub struct App {
 impl App {
     pub fn new(heater_max_duty: u16) -> Self {
         Self {
-            reg: PID::new(0.02, 0.05, 0.0, 0.0, 0.0),
+            reg: PID::new(0.02, 0.01, 0.0, 0.0, 0.0),
             state: AppState {
                 frame: 0,
                 heater_max_duty,
@@ -45,22 +45,11 @@ impl App {
     }
 
     pub fn button_click(&mut self, btn: Button) {
-        match btn {
-            Button::ButtonA => {
-                self.state.set_temp = self
-                    .state
-                    .set_temp
-                    .saturating_sub(100)
-                    .clamp(15_000, 40_000)
-            }
-            Button::ButtonB => {
-                self.state.set_temp = self
-                    .state
-                    .set_temp
-                    .saturating_add(100)
-                    .clamp(15_000, 40_000)
-            }
-        }
+        let temp = match btn {
+            Button::ButtonA => self.state.set_temp.saturating_sub(100),
+            Button::ButtonB => self.state.set_temp.saturating_add(100),
+        };
+        self.state.set_temp = temp.clamp(15_000, 40_000)
     }
 
     pub fn get_heater_duty(&mut self, temp: u16) -> u16 {

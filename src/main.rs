@@ -55,6 +55,7 @@ mod xi {
             ctx.device.GPIOC,
             &mut rcc,
         );
+
         pins.gpio_a1.listen(SignalEdge::Falling, &mut exti);
         pins.gpio_a2.listen(SignalEdge::Falling, &mut exti);
 
