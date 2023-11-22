@@ -148,6 +148,7 @@ mod xi {
             ctx.local.ui.update(app.state());
         });
         ctx.local.ui.render(ctx.local.display);
+        ctx.local.ui_timer.clear_irq();
     }
 
     #[task(binds = EXTI0_1, local = [exti], shared = [app])]
